@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/ubuntu2004"
 
   config.ssh.forward_agent = true
-  config.vm.synced_folder "./", "/home/vagrant/", disabled: false, owner: "vagrant", group: "vagrant"
+  config.vm.synced_folder "./", "/home/vagrant/gitops-backend", disabled: false, owner: "vagrant", group: "vagrant"
 
   for i in 60000..60100
     config.vm.network :forwarded_port, guest: i, host: i
@@ -119,6 +119,11 @@ Vagrant.configure("2") do |config|
         mv /tmp/${binary} /usr/local/bin
         done
         SHELL
+    end
+    config.vm.provision "set-login", type: "shell", run: "once", privileged: true do |sh|
+      sh.inline = <<~SHELL
+    [[ ! `grep "cd /home/vagrant/gitops-backend" /home/vagrant/.bashrc` ]] && echo "cd /home/vagrant/gitops-backend" >> /home/vagrant/.bashrc
+    SHELL
     end
 end
 
