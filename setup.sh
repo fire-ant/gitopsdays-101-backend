@@ -40,6 +40,17 @@ which containerd || apt-get install -y --no-install-recommends containerd
 # probably better to run docker in a beefy microvm but necessary for other things
 curl -sSL https://get.docker.com/ | sh
 
+#  install libvirt
+apt install -y --no-install-recommends \
+qemu-kvm \
+libvirt-daemon-system \
+libvirt-clients \
+bridge-utils 
+adduser ${USER} libvirt
+adduser ${USER} kvm
+setfacl -m u:${USER}:rw /dev/kvm
+
+
 # install CNI
 export CNI_VERSION=v0.9.1
 export ARCH=$([ $(uname -m) = "x86_64" ] && echo amd64 || echo arm64)

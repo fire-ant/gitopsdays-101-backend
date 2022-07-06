@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  git-sync:
+    image: openweb/git-sync:0.0.1
+    environment:
+      GIT_SYNC_REPO: "https://github.com/fire-ant/gitopsdays-101-inventory.git"
+      GIT_SYNC_DEST: "/git"
+      GIT_SYNC_BRANCH: "master"
+      GIT_SYNC_SPARSE_CHECKOUT_FILE: "sparse-checkout"
+      GIT_SYNC_REV: "FETCH_HEAD"
+      GIT_SYNC_WAIT: "5"
+    volumes:
+      - /etc/firecracker:/git:rw,z
+    restart: always
+volumes:
+  manifests:
+    driver: local
